@@ -1,5 +1,5 @@
 class GitDj
-  VERSION = '0.0.1'
+  require 'git_dj/version'
   INTEGRATION_BRANCH = 'staging'
   RELEASE_BRANCH = 'master'
 
