@@ -11,7 +11,7 @@ class GitDj
     when 'integrate'
       integrate_current_branch
     when 'release'
-      releast_current_branch
+      release_current_branch
     when 'help'
       print_help
     else
@@ -25,6 +25,7 @@ class GitDj
       run_cmds [
         "git checkout #{INTEGRATION_BRANCH}",
         "git merge #{cur_branch}",
+        "git push origin #{INTEGRATION_BRANCH}",
         "git checkout #{cur_branch}"
       ]
 
@@ -40,6 +41,7 @@ class GitDj
       run_cmds [
         "git checkout #{RELEASE_BRANCH}",
         "git merge #{cur_branch}",
+        "git push origin #{RELEASE_BRANCH}",
         "git checkout #{cur_branch}"
       ]
 
