@@ -21,7 +21,11 @@ class GitDj
 
   def integrate_current_branch
     cur_branch = current_branch_name
-    if has_none_uncommited_changes
+    if has_uncommited_changes
+      puts red_color("Failed to integrate #{cur_branch}: you have uncommited changes")
+    elsif cur_branch == INTEGRATION_BRANCH
+      puts red_color("Can not integrate #{INTEGRATION_BRANCH} into #{INTEGRATION_BRANCH}")
+    else
       run_cmds [
         "git checkout #{INTEGRATION_BRANCH}",
         "git merge #{cur_branch}",
@@ -30,14 +34,16 @@ class GitDj
       ]
 
       puts green_color("Successfully integrated #{cur_branch}")
-    else
-      puts red_color("Failed to integrate #{cur_branch}: you have uncommited changes")
     end
   end
 
   def release_current_branch
     cur_branch = current_branch_name
-    if has_none_uncommited_changes
+    if has_uncommited_changes
+      puts red_color("Failed to release #{cur_branch}: you have uncommited changes")
+    elsif cur_branch == RELEASE_BRANCH || cur_branch == INTEGRATION_BRANCH
+      puts red_color("Can not integrate #{cur_branch} into #{RELEASE_BRANCH}")
+    else
       run_cmds [
         "git checkout #{RELEASE_BRANCH}",
         "git merge #{cur_branch}",
@@ -46,8 +52,6 @@ class GitDj
       ]
 
       puts green_color("Successfully released #{cur_branch}")
-    else
-      puts red_color("Failed to release #{cur_branch}: you have uncommited changes")
     end
   end
 
@@ -76,8 +80,8 @@ Opts:
   end
 
 private
-  def has_none_uncommited_changes
-    %x[git diff].chomp.strip == ''
+  def has_uncommited_changes
+    %x[git diff].chomp.strip != ''
   end
 
   def run_cmds(cmds)
