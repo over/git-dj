@@ -73,9 +73,6 @@ Usage:
 #{green_color('gdj integrate')} - merge current branch in staging branch, and switch back
 #{green_color('gdj release')} - merge current branch into master, and switch back
 
-Opts:
-#{green_color('--deploy')} - call cap staging deploy after merge into staging, or cap production deploy after merge into production
-
 }
   end
 
