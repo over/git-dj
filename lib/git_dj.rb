@@ -2,6 +2,7 @@ class GitDj
   require 'git_dj/version'
   INTEGRATION_BRANCH = 'staging'
   RELEASE_BRANCH = 'master'
+  LOG_FILE_NAME = '/tmp/gdj_activity'
 
   def initialize
   end
@@ -12,6 +13,8 @@ class GitDj
       integrate_current_branch
     when 'release'
       release_current_branch
+    when 'continue'
+      continue_prev_commands
     when 'help'
       print_help
     else
@@ -55,6 +58,11 @@ class GitDj
     end
   end
 
+  def continue_prev_commands
+    cmds = File.read(LOG_FILE_NAME).chomp.strip.split("\n")
+    run_cmds(cmds)
+  end
+
   def current_branch_name
     out = %x[git branch]
     branch_string = out.split("\n").detect do |str|
@@ -82,8 +90,23 @@ private
   end
 
   def run_cmds(cmds)
+    to_do = cmds.dup
     cmds.each do |cmd|
-      system(cmd)
+      if system(cmd)
+        to_do.delete(cmd)
+        dump_cmds_to_disk(to_do)
+      else
+        puts red_color("Command failed: #{cmd}.")
+        puts red_color("Fix it and run gdj continue")
+      end
+    end
+  end
+
+  def dump_cmds_to_disk(cmds)
+    if cmds.any?
+      File.open(LOG_FILE_NAME, 'w') {|f| f.write(cmds.join("\n")) }
+    else
+      FileUtils.rm(LOG_FILE_NAME)
     end
   end
 
