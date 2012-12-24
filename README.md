@@ -1,4 +1,3 @@
-# Git::Dj
 # Git Dj - is an simple lightweight alternative for git flow. See, how it works:
 
 **gdj integrate** – merges current branch into staging branch, executes git push origin staging and switches back to current branch
