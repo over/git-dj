@@ -19,6 +19,31 @@ If you want to finish feature:
     gdj release
     cap production deploy
 
+Integrate and Release should fail, if git merge failes. In this case,
+resolve conflits and type:
+
+    gdj continue
+
+
+This will proceed all previous commands.
+
+If you want to push to remote branch:
+
+    gdj put
+
+And this will execute:
+
+    git pull origin [branch_name]
+    git push origin [branch_name]
+
+If you want to pull remote branche, run:
+
+    gdj get
+
+And this will execute:
+
+    git pull origin [branch_name]
+
 Keep your workflow simple.
 
 ## Contributing
