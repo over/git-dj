@@ -25,6 +25,7 @@ class GitDj
   end
 
   def integrate_current_branch
+    drop_commands_cache
     cur_branch = current_branch_name
     if has_uncommited_changes
       puts red_color("Failed to integrate #{cur_branch}: you have uncommited changes")
@@ -43,6 +44,7 @@ class GitDj
   end
 
   def release_current_branch
+    drop_commands_cache
     cur_branch = current_branch_name
     if has_uncommited_changes
       puts red_color("Failed to release #{cur_branch}: you have uncommited changes")
@@ -87,6 +89,13 @@ Usage:
   end
 
 private
+
+  def drop_commands_cache
+    if File.exists?(LOG_FILE_NAME)
+      FileUtils.rm(LOG_FILE_NAME)
+    end
+  end
+
   def has_uncommited_changes
     %x[git diff].chomp.strip != ''
   end
