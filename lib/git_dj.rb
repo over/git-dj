@@ -91,7 +91,9 @@ Usage:
 private
 
   def drop_commands_cache
-    FileUtils.rm LOG_FILE_NAME
+    if File.exists?(LOG_FILE_NAME)
+      FileUtils.rm(LOG_FILE_NAME)
+    end
   end
 
   def has_uncommited_changes
