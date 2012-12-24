@@ -15,6 +15,10 @@ class GitDj
       integrate_current_branch
     when 'release'
       release_current_branch
+    when 'get'
+      get_updates_from_origin
+    when 'put'
+      push_updates_to_origin
     when 'continue'
       continue_prev_commands
     when 'help'
@@ -65,6 +69,18 @@ class GitDj
   def continue_prev_commands
     cmds = File.read(LOG_FILE_NAME).chomp.strip.split("\n")
     run_cmds(cmds)
+  end
+
+  def get_updates_from_origin
+    drop_commands_cache
+    cur_branch = current_branch_name
+    run_cmds [ "git pull origin #{cur_branch}" ]
+  end
+
+  def push_updates_to_origin
+    drop_commands_cache
+    cur_branch = current_branch_name
+    run_cmds [ "git push origin #{cur_branch}" ]
   end
 
   def current_branch_name
