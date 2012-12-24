@@ -80,7 +80,10 @@ class GitDj
   def push_updates_to_origin
     drop_commands_cache
     cur_branch = current_branch_name
-    run_cmds [ "git push origin #{cur_branch}" ]
+    run_cmds [
+      "git pull origin #{cur_branch}",
+      "git push origin #{cur_branch}"
+    ]
   end
 
   def current_branch_name
@@ -134,7 +137,7 @@ private
     if cmds.any?
       File.open(LOG_FILE_NAME, 'w') {|f| f.write(cmds.join("\n")) }
     else
-      FileUtils.rm(LOG_FILE_NAME)
+      drop_commands_cache
     end
   end
 
