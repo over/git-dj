@@ -4,6 +4,8 @@ class GitDj
   RELEASE_BRANCH = 'master'
   LOG_FILE_NAME = '/tmp/gdj_activity'
 
+  class CommandFailedError < StandardError; end;
+
   def initialize
   end
 
@@ -98,6 +100,7 @@ private
       else
         puts red_color("Command failed: #{cmd}.")
         puts red_color("Fix it and run gdj continue")
+        raise CommandFailedError.new
       end
     end
   end
@@ -119,4 +122,5 @@ private
   end
 
 end
+
 
