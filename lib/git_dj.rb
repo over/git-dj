@@ -13,6 +13,8 @@ class GitDj
     case ARGV[0]
     when 'integrate'
       integrate_current_branch
+    when 'integrate2'
+      integrate_current_branch2
     when 'release'
       release_current_branch
     when 'get'
@@ -29,18 +31,27 @@ class GitDj
   end
 
   def integrate_current_branch
+    send_branch_to_integration('')
+  end
+
+  def integrate_current_branch2
+    send_branch_to_integration('2')
+  end
+
+  def send_branch_to_integration(staging_ver = '')
     drop_commands_cache
     cur_branch = current_branch_name
+    integration_branch = INTEGRATION_BRANCH + staging_ver
     if has_uncommited_changes
       puts red_color("Failed to integrate #{cur_branch}: you have uncommited changes")
-    elsif cur_branch == INTEGRATION_BRANCH
-      puts red_color("Can not integrate #{INTEGRATION_BRANCH} into #{INTEGRATION_BRANCH}")
+    elsif cur_branch == integration_branch
+      puts red_color("Can not integrate #{integration_branch} into #{integration_branch}")
     else
       run_cmds [
-        "git checkout #{INTEGRATION_BRANCH}",
+        "git checkout #{integration_branch}",
+        "git pull origin #{integration_branch}",
         "git merge #{cur_branch}",
-        "git pull origin #{INTEGRATION_BRANCH}",
-        "git push origin #{INTEGRATION_BRANCH}",
+        "git push origin #{integration_branch}",
         "git checkout #{cur_branch}"
       ]
 
