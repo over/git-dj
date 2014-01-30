@@ -115,6 +115,7 @@ class GitDj
 
 Usage:
 #{green_color('gdj integrate')} - merge current branch in staging branch, and switch back
+#{green_color('gdj integrate2')} - merge current branch in staging2 branch, and switch back
 #{green_color('gdj release')} - merge current branch into master, and switch back
 #{green_color('gdj get')} - pull changes from origin to local
 #{green_color('gdj put')} - pull, then push changes from origin to local
