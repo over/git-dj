@@ -50,7 +50,7 @@ class GitDj
       run_cmds [
         "git checkout #{integration_branch}",
         "git pull origin #{integration_branch}",
-        "git merge #{cur_branch}",
+        "git merge --no-edit #{cur_branch}",
         "git push origin #{integration_branch}",
         "git checkout #{cur_branch}"
       ]
