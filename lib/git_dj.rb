@@ -23,6 +23,8 @@ class GitDj
       push_updates_to_origin
     when 'continue'
       continue_prev_commands
+    when "i"
+      integrate_current_branch_to_another
     when 'help'
       print_help
     else
@@ -31,17 +33,22 @@ class GitDj
   end
 
   def integrate_current_branch
-    send_branch_to_integration('')
+    send_branch_to_integration('staging')
   end
 
   def integrate_current_branch2
-    send_branch_to_integration('2')
+    send_branch_to_integration('staging2')
   end
 
-  def send_branch_to_integration(staging_ver = '')
+  def integrate_current_branch_to_another
+    send_branch_to_integration(ARGV[1])
+  end
+
+  def send_branch_to_integration(integration_branch_name)
     drop_commands_cache
     cur_branch = current_branch_name
-    integration_branch = INTEGRATION_BRANCH + staging_ver
+    integration_branch = integration_branch_name
+
     if has_uncommited_changes
       puts red_color("Failed to integrate #{cur_branch}: you have uncommited changes")
     elsif cur_branch == integration_branch
