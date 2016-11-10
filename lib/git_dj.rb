@@ -25,11 +25,20 @@ class GitDj
       continue_prev_commands
     when "i"
       integrate_current_branch_to_another
+    when 'pr'
+      create_pull_request
     when 'help'
       print_help
     else
       print_help
     end
+  end
+
+  def create_pull_request
+    run_cmds [
+      "git push origin #{current_branch_name}",
+      "open #{current_repo_url}/compare/#{current_branch_name}?expand=1"
+  ]
   end
 
   def integrate_current_branch
@@ -57,7 +66,7 @@ class GitDj
       run_cmds [
         "git checkout #{integration_branch}",
         "git pull origin #{integration_branch}",
-        "git merge #{cur_branch}",
+        "git merge --no-edit #{cur_branch}",
         "git push origin #{integration_branch}",
         "git checkout #{cur_branch}"
       ]
@@ -117,6 +126,11 @@ class GitDj
     branch_string.chomp.strip
   end
 
+  def current_repo_url
+    url = %x(git ls-remote --get-url origin)
+    url[0..-6]
+  end
+
   def print_help
     puts %Q{Git DJ #{VERSION}
 
@@ -126,6 +140,7 @@ Usage:
 #{green_color('gdj release')} - merge current branch into master, and switch back
 #{green_color('gdj get')} - pull changes from origin to local
 #{green_color('gdj put')} - pull, then push changes from origin to local
+#{green_color('gdj pr')} - push current branch to origin, then open pull request in browser
 #{green_color('gdj continue')} - continue previous failed command (after merge, etc)
 
 }
