@@ -1,5 +1,6 @@
 class GitDj
   require 'git_dj/version'
+  require 'fileutils'
   INTEGRATION_BRANCH = 'staging'
   RELEASE_BRANCH = 'master'
   LOG_FILE_NAME = '/tmp/gdj_activity'
